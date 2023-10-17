@@ -1,0 +1,63 @@
+{
+    "$schema": "https://vega.github.io/schema/vega-lite/v5.json",
+    "width": 850,
+    "height": 420,
+    "padding": {"left": -9},
+    "config": {
+        "background": "transparent",
+        "title": {"fontSize": 16}
+    },
+    "title": "Location of Incidents involving Migrants 2014 - 2023",
+
+    "projection": {"type": "equalEarth"},
+
+    "params": [
+        {
+            "name": "year_select",
+            "value": 2014,
+            "bind": {"input": "range", "min": 2014, "max": 2023, "step": 1, "name": "Select a Year:  "}
+        }
+    ],
+
+    "layer": [
+        {
+            "data": {
+                "url": "https://raw.githubusercontent.com/FIT3179/Vega-Lite/main/2_symbol_map/js/ne_110m_admin_0_countries.topojson",
+                "format": {"type": "topojson", "feature": "ne_110m_admin_0_countries"}
+            },
+            "mark": {"type": "geoshape", "fill": "#ccc7d1", "stroke": "white"}
+        },
+        {
+            "data": {
+                "url": "https://raw.githubusercontent.com/Dang-EmmaNguyen/fit3179-studio/main/missing_migrants.csv"
+            },
+            "transform": [
+                {
+                    "calculate": "split(datum.Coordinates, ',')[0]",
+                    "as": "latitude"
+                },
+                {
+                "calculate": "split(datum.Coordinates, ',')[1]",
+                "as": "longitude"
+                },
+                {"filter": "datum['Incident year'] == year_select"}
+            ],
+            "mark": {"type": "circle", "tooltip": {"content": "data"}},
+            "encoding": {
+                "longitude": {"field": "longitude", "type": "quantitative"},
+                "latitude": {"field": "latitude", "type": "quantitative"},
+                "size": {
+                    "field": "Total Number of Dead and Missing",
+                    "type": "quantitative",
+                    "title": "Number of victims"
+                },
+                "color": {"value": "#007193"},
+                "tooltip": [
+                    {"field": "Incident year", "type": "quantitative", "title": "Year of Incident"},
+                    {"field": "Total Number of Dead and Missing", "type": "quantitative", "title": "Number of Deaths/Missing"},
+                    {"field": "Cause of Death", "type": "nominal", "title": "Cause of Death"}
+                ]
+            }
+        }
+    ]
+}

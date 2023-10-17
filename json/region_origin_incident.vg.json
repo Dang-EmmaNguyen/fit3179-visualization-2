@@ -1,0 +1,45 @@
+{
+    "$schema": "https://vega.github.io/schema/vega-lite/v5.json",
+    "width": 270,
+    "height": 250,
+    
+    "data": {
+        "url": "https://raw.githubusercontent.com/Dang-EmmaNguyen/fit3179-studio/main/missing_migrants.csv"
+    },
+
+    "transform": [
+        {
+            "aggregate": [{"op": "count", "field": "Incident year", "as": "incident_count"}],
+            "groupby": ["Region of Origin", "Region of Incident"]
+        },
+        {
+            "filter": {"field": "Region of Origin", "oneOf": ["Latin America / Caribbean (P)", "Southern Asia", "Central America"]}
+        },
+        {
+            "window": [{"op": "row_number", "as": "row_number"}],
+            "sort": [{"field": "incident_count", "order": "descending"}],
+            "groupby": ["Region of Origin"]
+        },
+        {   "filter": {"field": "row_number", "lte": 3 }    }
+    ],
+
+    "mark": {"type": "arc", "innerRadius": 0},
+
+    "encoding": {
+        "column": {"field": "Region of Origin"},
+        "theta": {
+            "field": "incident_count", 
+            "type": "quantitative"
+        },
+        "color": {
+            "field": "Region of Incident",
+            "type": "nominal",
+            "title": "Top 3 Regions for Incidents"
+        },
+        "tooltip": [
+            {"field": "Region of Incident", "type": "nominal"},
+            {"field": "incident_count", "type": "quantitative", "title": "Number of Incidents"}
+        ],
+        "opacity": {"value": 1}
+    }
+}

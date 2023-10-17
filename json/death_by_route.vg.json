@@ -1,0 +1,46 @@
+{
+    "$schema": "https://vega.github.io/schema/vega-lite/v5.json",
+    "width": 680,
+    "height": 425,
+    "config": {
+        "background": "transparent",
+        "title": {"fontSize": 16}
+    },
+    "title": "Number of Deaths by Migration Route",
+    
+    "data": {
+        "url": "https://raw.githubusercontent.com/Dang-EmmaNguyen/fit3179-studio/main/missing_migrants.csv"
+    },
+
+    "transform": [
+        {
+            "aggregate": [{"op": "sum", "field": "Number of Dead", "as": "death_count"}],
+            "groupby": ["Incident year", "Migration route"]
+        },
+        {"filter": {"field": "Migration route", "valid": false}}
+    ],
+
+    "mark": {
+        "type": "circle",
+        "opacity": 0.8,
+        "stroke": "black",
+        "strokeWidth": 1
+    },
+
+    "encoding": {
+        "x": { "field": "Incident year", "type": "ordinal", "title": "Year", "axis": {"grid": false, "tickCount": 7}},
+        "y": {"field": "Migration route", "type": "nominal", "axis": {"title": ""}},
+        "size": {
+            "field": "death_count",
+            "type": "quantitative",
+            "title": "Casualties",
+            "legend": {"clipHeight": 30}
+        },
+        "color": {"field": "Migration route", "type": "nominal", "legend": null},
+        "tooltip": [
+            {"field": "Migration route", "type": "nominal"},
+            {"field": "Incident year", "type": "quantitative"},
+            {"field": "death_count", "type": "quantitative", "title": "Casualties"}
+        ]
+    }
+}

@@ -1,0 +1,343 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <title> Missing Migrants </title>
+    <!-- Import Vega & Vega-Lite (does not have to be from CDN) -->
+    <script src="https://cdn.jsdelivr.net/npm/vega@5.20.2"></script>
+    <script src="https://cdn.jsdelivr.net/npm/vega-lite@5.1.0"></script>
+    <script src="https://cdn.jsdelivr.net/npm/vega-embed@6.17.0"></script>
+
+    <!-- Import pure.css -->
+    <link rel="stylesheet" href="https://unpkg.com/purecss@2.0.3/build/pure-min.css"
+        integrity="sha384-cg6SkqEOCV1NbJoCu11+bm0NvBRc8IYLRGXkmNrqUBfTjmMYwNKPWBTIKyw9mHNJ" crossorigin="anonymous">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+
+    <!-- Google font -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Merriweather&family=Nunito&family=Open+Sans&family=Playfair+Display:wght@900&display=swap" rel="stylesheet">
+
+    <!-- CSS file -->
+    <link rel="stylesheet" type="text/css" href="css/styles.css" media="all">
+
+
+</head>
+
+<body>
+
+    <div class="page">
+
+        <!-- VIS TITLE AND SUBTITLE -->
+        <div class="pure-g section-container">
+            <div class="pure-u-1-1" style="text-align: center">
+                <h1>Global Missing Migrants</h1>
+                <p class="subtitle">Every year, thousands of migrants go missing all around the world, with most cases involve deaths due to various reasons.
+                    <br/> This visualization explores the challenges associated with global migration that have, at large, been unknown
+                    to the public.</p>
+            </div>
+        </div>
+        <!-- end pure grid group -->
+
+        <!-- HEADING 1: LOCATION -->
+        <div class="pure-g section-container">
+            <div class="pure-u-1-1" style="text-align: center">
+                <h2 class="section-header"> Location </h2>
+                <p class="subtitle"> Where are the most dangerous areas / regions for migration? Let's have a look at the specific routes and destinations. </p>
+            </div>
+        </div>
+        <!-- end pure grid group -->
+
+        <div class="section-container">
+            <!-- INCIDENT LOCATION MAP -->
+            <div class="pure-g">
+                <div class="pure-u-1-1">
+                    <div id="map_incident_location" class="vis-container"></div>
+                </div>
+            </div>
+            <!-- end pure grid group -->
+
+            <!-- MIGRATION ROUTE BAR -->
+            <div class="pure-g">
+                <div class="pure-u-1-3">
+                    <div class="description description-left">
+                        <p> Global migration happens all around the world, but the most popular and seemingly also the most dangerous routes are
+                            <strong>US-Mexico border, Sahara Desert crossing and Central Mediterranean</strong>. 
+                            <br/><br/> Migration within the <strong>Southern Asia</strong> region is mainly due to harsh climate change and seeking better livelihoods, 
+                            though moving between sub-regions is deemed dangerous for the same reason of <strong>extreme environmental conditions</strong>.
+                            <br/><br/> For migrants from <strong>Central America</strong>, moving up to North America (the US) is considered the world's <span class="danger-text">"deadliest 
+                                overland route"</span>, from crossing the Chihuahuan desert, drowning in the canals to crimes such as kidnapping.
+                        </p>
+                    </div>
+                </div>
+                <div class="pure-u-2-3">
+                    <div id="migration_route" class="vis-container"></div>
+                </div>
+            </div>
+            <!-- end pure grid group -->
+
+            <!-- ORIGIN -- INCIDENT LOCATION -->
+            <div class="chart-title">
+                <h3> Top 3 Most Dangerous Destination for: </h3>
+            </div>
+            <div class="pure-g">
+                <div class="pure-u-1-3">
+                    <div id="origin_centralamerica" class="vis-container"></div>
+                </div>
+                <div class="pure-u-1-3">
+                    <div id="origin_latin" class="vis-container"></div>
+                </div>
+                <div class="pure-u-1-3">
+                    <div id="origin_southasia" class="vis-container"></div>
+                </div>
+            </div>
+            <!-- end pure grid group -->
+        </div>
+
+        <!-- HEADING 2: BY AGE / GENDER -->
+        <div class="pure-g section-container">
+            <div class="pure-u-1-1" style="text-align: center">
+                <h2 class="section-header"> Deaths & Missing </h2>
+                <p class="subtitle"> Let's have a look at the number of affected migrants and the nature of incidents over the years. </p>
+            </div>
+        </div>
+        <!-- end pure grid group -->
+
+        <div class="section-container">
+
+            <!-- GROUP OF LINE CHARTS  -->
+            <div class="pure-g">
+                <div class="pure-u-2-3">
+                    <div id="line_chart_selection"></div>
+                    <select id="chart-select">
+                        <option value="./json/victim_count_death_missing.vg.json">Death vs Missing</option>
+                        <option value="./json/survival_rate.vg.json">Survival Rate</option>
+                        <option value="./json/victim_count_gender.vg.json">Age & Gender</option>
+                    </select>
+                </div>
+                <div class="pure-u-1-3">
+                    <div class="description description-right">
+                        <p class="subtitle"> *Select chart to view Changes in relevant statistics over the years.</p>
+                        <p> Starting from 2015, casualties due to migration has always exceeded the number of missings. 2022 sees a <span class="danger-text">sudden surge in
+                            both death and missing</span> counts, which is directly linked to the significant increase in overall global migration due to 
+                            issues arising <strong>post-pandemic and the Russia-Ukraine conflict</strong>.
+                            <br/><br/> Despite such major increase, 2019 was the "deadliest" year for migration with a survival rate <span class="danger-text">as low as 47%</span>. 
+                            <br/>It is also the case that the majority of migrants involved in incidents are <strong>Male</strong>, though there was 
+                            an unusually high number of Female victims in 2018.
+                        </p>
+                    </div>
+                </div>
+            </div>
+            <!-- end pure grid group -->
+
+            <!-- DEATH BY MIG ROUTE -->
+            <div class="pure-g">
+                <div class="pure-u-1-1">
+                    <div id="death_route" class="vis-container"></div>
+                </div>
+            </div>
+            <!-- end pure grid group -->
+
+            <!-- TRIO ANNOTATION -->
+            <div class="pure-g">
+                <div class="pure-u-1-3">
+                    <div class="trio-left">      <!--mbe use ID here for styling-->
+                        <p>
+                            For migration, the 2 <span class="danger-text">deadliest years were 2016 and 2022</span>.
+                            <br/> The majority of deaths in 2016 took place in the crossing of Central Mediterranean, Sahara Desert and 
+                            the US-Mexico border. Noteably, the <span class="danger-text">casualties on 
+                            Sahara desert nearly doubled in 2016</span> compared to the previous year, which was mainly comprised of people 
+                            originating from <strong>West Africa</strong> travelling to Libya and eventually <strong>bound for Europe</strong>.
+                        </p>
+                    </div>
+                </div>
+                <div class="pure-u-1-3">
+                    <div class="trio-center">
+                        <p> The route from Central to North America has always been considered a dangerous journey, <span class="danger-text">taking the lives of 
+                            400-600 migrants</span> each year consistently.
+                            <br/>Migrating through <strong>Central Mediterranean</strong> is one of, if not the most popular route from Africa
+                            to Europe but it also results in the <span class="danger-text">highest number of casualties</span> every year, though there seems to be a <strong>decrease
+                            from 2015</strong> to recent years.
+                        </p>
+                    </div>
+                </div>
+                <div class="pure-u-1-3">
+                    <div class="trio-right">
+                        <p>
+                            Crossing from the <strong>African Horn to Yemen</strong> saw an <span class="danger-text">unusually 
+                            high death toll</span> in 2022. Statistics show that migrant arrivals in Yemen through this path almost <strong>tripled
+                            from 2021 to 2022</strong>, which explains the subsequent rise in casualties. As living conditions in former countries
+                            (Somalia, Ethiopia, ...) worsen, many people are seeking better livelihood in the <strong>Arab Gulf 
+                            countries</strong> (UAE, Qatar, Saudi Arabia). Unfortunately, many people are also losing their lives along the way.
+                        </p>
+                    </div>
+                </div>
+            </div>
+            <!-- end pure grid group -->
+
+            <!-- COD BY YEAR -->
+            <div class="pure-g">
+                <div class="pure-u-1-1">
+                    <div id="cod_year" class="vis-container"></div>
+                </div>
+            </div>
+            <!-- end pure grid group -->
+
+            <!-- LAST ANNOTATION + PIC -->
+            <div class="pure-g">
+                <div class="pure-u-1-3">
+                    <div class="description-left">
+                        <p>
+                            It was shown that of all identified cases, <span class="danger-text">drowning, sickness
+                            and vehicle accidents</span> are the 3 biggest causes of death every year. Many of the popular
+                            routes involve crossing borders by <strong>traversing oceans and canals</strong>, which poses as a challenge especially 
+                            for overcrowded groups.
+                            <br/>On land, deaths from vehicle accidents have been gradually rising over the years. Considering the
+                            long travel distance and particarly <strong>worldwide regulations against uncontrolled migration</strong> (leaving many journeys hidden
+                            and unprotected), the high death toll from hazardous transportation appears inevitable.
+                        </p>
+                    </div>
+                </div>
+                <div class="pure-u-2-3">
+                    <div class="picture-container">
+                        <img src="./images/mig-2.1.jpg" width="620" height="325">
+                    </div>
+                </div>
+            </div>
+            <!-- end pure grid group -->
+
+            <!-- CONCLUSION -->
+            <div class="pure-g">
+                <div class="pure-u-1-1">
+                    <p class="conclusion-text">
+                        In conclusion, <strong>global migration is a phenomenon bound to become even bigger</strong> with the constant
+                            change in worldwide environmental, social, economic and political states. As 
+                            instability arises in some parts of the world, people seeking better chances for themselves and their
+                            family should not be condemned but rather is a <strong>serious global issue</strong>, particularly given the many <span class="danger-text">deadly challenges</span>
+                            along the way.
+                    </p>
+                </div>
+            </div>
+            <!-- end pure grid group -->
+        
+        </div>
+        <br/>
+        <br/>
+        <div class="pure-g">
+            <div class="pure-u-1-1 footer">
+                <p>This visualisation is created by Dang Huong Giang Nguyen.
+                    The data source is <a href="https://www.kaggle.com/datasets/nelgiriyewithana/global-missing-migrants-dataset">Global Missing Migrants</href>.</p>
+            </div>
+        </div>
+
+
+    </div> <!-- end page -->
+
+    <script type="text/javascript">
+
+        // Location
+        var map = "./json/incident_location_proportion.vg.json";
+        var route_bar = "./json/migration_route_casecount.vg.json";
+        var origin_america = "./json/origin_central_america.vg.json";
+        var origin_latin = "./json/origin_latin_caribbean.vg.json";
+        var origin_southasia = "./json/origin_southern_asia.vg.json";
+
+        // Death & Missing
+        var age_gender = "./json/victim_count_gender.vg.json";
+        var death_route = "./json/death_by_route.vg.json";
+        var cod_stacked = "./json/cod_year.vg.json";
+        var death_missing = "./json/victim_count_death_missing.vg.json";
+        var survival_rate_line = "./json/survival_rate.vg.json";
+
+
+        vegaEmbed('#map_incident_location', map, { "actions": false }).then(function (result) {
+        // Access the Vega view instance (https://vega.github.io/vega/docs/api/view/) as result.view
+        }).catch(console.error);
+
+        vegaEmbed('#line_chart_age_gender', age_gender, { "actions": false }).then(function (result) {
+        // Access the Vega view instance (https://vega.github.io/vega/docs/api/view/) as result.view
+        }).catch(console.error);
+
+        vegaEmbed('#migration_route', route_bar, { "actions": false }).then(function (result) {
+        // Access the Vega view instance (https://vega.github.io/vega/docs/api/view/) as result.view
+        }).catch(console.error);
+
+        vegaEmbed('#origin_centralamerica', origin_america, { "actions": false }).then(function (result) {
+        // Access the Vega view instance (https://vega.github.io/vega/docs/api/view/) as result.view
+        }).catch(console.error);
+
+        vegaEmbed('#origin_latin', origin_latin, { "actions": false }).then(function (result) {
+        // Access the Vega view instance (https://vega.github.io/vega/docs/api/view/) as result.view
+        }).catch(console.error);
+
+        vegaEmbed('#origin_southasia', origin_southasia, { "actions": false }).then(function (result) {
+        // Access the Vega view instance (https://vega.github.io/vega/docs/api/view/) as result.view
+        }).catch(console.error);
+
+        vegaEmbed('#death_route', death_route, { "actions": false }).then(function (result) {
+        // Access the Vega view instance (https://vega.github.io/vega/docs/api/view/) as result.view
+        }).catch(console.error);
+
+        vegaEmbed('#cod_year', cod_stacked, { "actions": false }).then(function (result) {
+        // Access the Vega view instance (https://vega.github.io/vega/docs/api/view/) as result.view
+        }).catch(console.error);
+
+        vegaEmbed('#line_chart_death_missing', death_missing, { "actions": false }).then(function (result) {
+        // Access the Vega view instance (https://vega.github.io/vega/docs/api/view/) as result.view
+        }).catch(console.error);
+
+    </script>
+
+    <script src="https://cdn.jsdelivr.net/npm/vega-embed@6"></script>
+    <script>
+    const chartContainer = document.getElementById("line_chart_selection");
+    const chartSelect = document.getElementById("chart-select");
+
+    // Create a function to load and render the selected chart
+    const loadChart = async (chartPath) => {
+        // Clear the existing chart (if any)
+        chartContainer.innerHTML = "";
+
+        try {
+        // Load the selected JSON file
+        const response = await fetch(chartPath);
+
+        if (response.ok) {
+            // Parse the JSON file
+            const chartSpec = await response.json();
+
+            // Embed the chart using Vega-Embed
+            vegaEmbed(chartContainer, chartSpec, { "actions": false });
+        } else {
+            console.error("Failed to load the JSON file.");
+        }
+        } catch (error) {
+        console.error("An error occurred:", error);
+        }
+    };
+
+    // Set a default chart (change "chart1.json" to your default chart)
+    const defaultChart = "./json/victim_count_death_missing.vg.json";
+    chartSelect.value = defaultChart;
+
+    // Load the default chart on page load
+    if (defaultChart) {
+        loadChart(defaultChart);
+    }
+
+    // Listen for changes in the dropdown and load the selected chart
+    chartSelect.addEventListener("change", () => {
+        const selectedChart = chartSelect.value;
+        if (selectedChart) {
+            loadChart(selectedChart);
+        }
+    });
+    </script>
+
+    
+
+</body>
+
+</html>

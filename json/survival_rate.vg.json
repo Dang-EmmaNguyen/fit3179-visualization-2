@@ -1,0 +1,99 @@
+{
+    "$schema": "https://vega.github.io/schema/vega-lite/v5.json",
+    "width": 500,
+    "height": 350,
+    "padding": {"left": -120, "top": 20},
+    "config": {
+        "background": "transparent",
+        "title": {"fontSize": 16}
+    },
+    "title": "Survival Rate 2014-2023",
+    
+    "data": {
+        "url": "https://raw.githubusercontent.com/Dang-EmmaNguyen/fit3179-studio/main/missing_migrants.csv"
+    },
+
+    "params": [
+        {
+            "name": "Year_from",
+            "value": 2014,
+            "bind": {
+                "input": "range",
+                "min": 2014,
+                "max": 2023,
+                "step": 1,
+                "name": "Year: "
+            }
+        }
+    ],
+
+    "transform": [
+        {
+            "aggregate": [
+                {"op": "sum", "field": "Total Number of Dead and Missing", "as": "victims"},
+                {"op": "sum", "field": "Number of Survivors", "as": "survivors"}
+            ],
+            "groupby": ["Incident year"]
+        },
+        {"filter": "datum['Incident year'] >= Year_from"},
+        {
+            "calculate": "'The lowest survival rate is of Year ' + datum['Incident year']",
+            "as": "text_annotation"
+        },
+        {
+            "calculate": "(datum.survivors / (datum.survivors+datum.victims))*100", "as": "Survival rate"
+        }
+    ],
+    
+    "encoding": {
+        "x": {
+            "field": "Incident year",
+            "title": "Year",
+            "axis": {"tickCount": 7},
+            "scale": {"type": "ordinal"}
+        },
+        "y": {
+            "field": "Survival rate",
+            "type": "quantitative",
+            "title": "Survival rate (%)",
+            "scale": {"zero": false}
+        }
+    },
+
+    "layer": [
+        {
+            "mark": {
+                "type": "line",
+                "point": true,
+                "color": "#383a47"
+            },
+            "encoding": {
+                "tooltip": [
+                    {"field": "Incident year", "type": "quantitative", "title": "Year"},
+                    {"field": "Survival rate", "type": "quantitative", "title": "Survival rate", "format": ".2f"}
+                ]
+            }
+        },
+        {
+            "mark": {
+                "type": "text",
+                "align": "right",
+                "baseline": "line-bottom",
+                "dx": -15,
+                "fontSize": 11,
+                "fontStyle": "italic"
+            },
+            "encoding": {
+                "text": {"field": "text_annotation"},
+                "color": {"value": "black"},
+                "opacity": {
+                    "condition": {
+                        "test": "(datum['Incident year'] == 2019)",
+                        "value": 1
+                    },
+                    "value": 0
+                }
+            }
+        }
+    ]
+}

@@ -1,0 +1,114 @@
+{
+    "$schema": "https://vega.github.io/schema/vega-lite/v5.json",
+    "width": 500,
+    "height": 350,
+    "padding": {"left": -10, "top": 20},
+    "config": {
+        "background": "transparent",
+        "title": {"fontSize": 16}
+    },
+    "title": "Affected Migrants by Age & Gender 2014-2023",
+    
+    "data": {
+        "url": "https://raw.githubusercontent.com/Dang-EmmaNguyen/fit3179-studio/main/missing_migrants.csv"
+    },
+
+    "params": [
+        {
+            "name": "Year_from",
+            "value": 2014,
+            "bind": {
+                "input": "range",
+                "min": 2014,
+                "max": 2023,
+                "step": 1,
+                "name": "Year: "
+            }
+        }
+    ],
+
+    "transform": [
+        {
+            "aggregate": [
+                {"op": "sum", "field": "Number of Females", "as": "Female"},
+                {"op": "sum", "field": "Number of Males", "as": "Male"},
+                {"op": "sum", "field": "Number of Children", "as": "Children"}
+            ],
+            "groupby": ["Incident year"]
+        },
+        {
+            "fold": ["Female", "Male", "Children"],
+            "as": ["Category", "Victim_count"]
+        },
+        {"filter": "datum['Incident year'] >= Year_from"},
+        {
+            "calculate": "'Sudden increase in ;' + datum['Category'] + ' victims'",
+            "as": "text_annotation_raw"
+        },
+        {
+            "calculate": "split(datum.text_annotation_raw,';')",
+            "as": "text_annotation"
+        }
+    ],
+    
+    "encoding": {
+        "x": {
+            "field": "Incident year",
+            "title": "Year",
+            "axis": {"tickCount": 7},
+            "scale": {"type": "ordinal"}
+        },
+        "y": {
+            "field": "Victim_count",
+            "type": "quantitative",
+            "title": "Number of Victims",
+            "scale": {"zero": true}
+        }
+    },
+
+    "layer": [
+        {
+            "mark": {
+                "type": "line",
+                "point": true
+            },
+            "encoding": {
+                "color": {
+                    "field": "Category",
+                    "type": "nominal",
+                    "title": "Category",
+                    "scale": {
+                        "domain": ["Children", "Male", "Female"],
+                        "range": ["#57a070", "#2f465e", "#8f4550"]
+                    }
+                },
+                "tooltip": [
+                    {"field": "Incident year", "type": "quantitative", "title": "Year"},
+                    {"field": "Category", "type": "nominal", "title": "Category"},
+                    {"field": "Victim_count", "type": "quantitative", "title": "Number of victims"}
+                ]
+            }
+        },
+        {
+            "mark": {
+                "type": "text",
+                "align": "right",
+                "baseline": "line-bottom",
+                "dx": -15,
+                "fontSize": 11,
+                "fontStyle": "italic"
+            },
+            "encoding": {
+                "text": {"field": "text_annotation"},
+                "color": {"value": "black"},
+                "opacity": {
+                    "condition": {
+                        "test": "(datum['Incident year'] == 2018 && datum['Category'] == 'Female') || (datum['Incident year'] == 2022 && datum['Category'] == 'Male')",
+                        "value": 1
+                    },
+                    "value": 0
+                }
+            }
+        }
+    ]
+}

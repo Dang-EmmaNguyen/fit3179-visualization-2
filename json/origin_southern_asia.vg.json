@@ -1,0 +1,66 @@
+{
+    "$schema": "https://vega.github.io/schema/vega-lite/v5.json",
+    "width": 300,
+    "height": 200,
+    "config": {
+        "background": "transparent",
+        "title": {"fontSize": 16}
+    },
+    "title": "Origin: Southern Asia",
+    
+    "data": {
+        "url": "https://raw.githubusercontent.com/Dang-EmmaNguyen/fit3179-studio/main/missing_migrants.csv"
+    },
+
+    "transform": [
+        {
+            "aggregate": [{"op": "count", "field": "Incident year", "as": "incident_count"}],
+            "groupby": ["Region of Origin", "Region of Incident"]
+        },
+        {   "filter": "datum['Region of Origin'] == 'Southern Asia'"    },
+        {
+            "window": [{"op": "row_number", "as": "row_number"}],
+            "sort": [{"field": "incident_count", "order": "descending"}]
+        },
+        {   "filter": {"field": "row_number", "lte": 3 }    }
+    ],
+
+    "encoding": {
+        "theta": {
+            "field": "incident_count", 
+            "type": "quantitative",
+            "stack": true
+        },
+        "color": {
+            "field": "Region of Incident",
+            "type": "nominal",
+            "scale": {
+                "domain": ["Southern Asia", "South-eastern Asia", "Europe"],
+                "range": ["#9a383a", "#8e7b56", "#ce796b"]
+            },
+            "legend": null
+        }
+    },
+
+    "layer": [
+        {
+            "mark": {"type": "arc", "outerRadius": 80},
+            "encoding": {
+                "tooltip": [
+                    {"field": "Region of Incident", "type": "nominal"},
+                    {"field": "incident_count", "type": "quantitative", "title": "Number of Incidents"}
+                ]
+            }
+        },
+        {
+            "mark": {"type": "text", "radius": 110},
+            "encoding": {
+                "text": {"field": "Region of Incident", "type": "nominal"},
+                "tooltip": [
+                    {"field": "Region of Incident", "type": "nominal"},
+                    {"field": "incident_count", "type": "quantitative", "title": "Number of Incidents"}
+                ]
+            }
+        }
+    ]
+}
